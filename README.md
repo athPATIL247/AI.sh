@@ -1,6 +1,20 @@
 # AI.sh
 
-AI.sh is a CLI tool that converts natural language into safe shell commands.
+AI.sh is a CLI tool that converts natural language into safe shell commands, powered by Groq LLM.
+
+## Install
+
+```bash
+npm install -g @atharvaspatil5/aish
+```
+
+## Setup
+
+Get a free API key at [console.groq.com](https://console.groq.com), then create a `.env` file in your working directory:
+
+```env
+GROQ_API_KEY=your_groq_api_key
+```
 
 ## Usage
 
@@ -37,22 +51,9 @@ ai "delete everything"
 
 ## Safety
 
-* Blocks critical system-level commands
 * Warns on risky operations (like file deletion)
 * Requires confirmation before execution
-
-## Setup
-
-```bash
-npm install
-npm link
-```
-
-Create a `.env` file:
-
-```env
-GROQ_API_KEY=your_api_key
-```
+* Dangerous commands always prompt, even with `-y`
 
 ## Structure
 
@@ -60,11 +61,10 @@ GROQ_API_KEY=your_api_key
 bin/        CLI entry
 src/        core logic
   llm.js
-  validator.js
   executor.js
   index.js
 ```
 
 ## Notes
 
-This is a local CLI tool. Use carefully when executing destructive commands.
+Use carefully when executing destructive commands. The `.env` file must be present in the directory where you run `ai`.
