@@ -1,6 +1,6 @@
 {
   "name": "@atharvaspatil5/aish",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "AI-powered CLI that converts natural language to shell commands",
   "main": "index.js",
   "scripts": {
