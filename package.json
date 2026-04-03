@@ -1,0 +1,22 @@
+{
+  "name": "@atharvaspatil5/aish",
+  "version": "1.0.1",
+  "description": "AI-powered CLI that converts natural language to shell commands",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "athPATIL247",
+  "license": "ISC",
+  "bin": {
+    "ai": "bin/ai.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "commander": "^14.0.3",
+    "dotenv": "^17.4.0",
+    "groq-sdk": "^1.1.2"
+  }
+}
