@@ -5,20 +5,19 @@ const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY,
 });
 
-export async function getCommand(query) {
+export async function getCommand(query){
     const response = await groq.chat.completions.create({
         model: "llama-3.1-8b-instant",
         messages: [
             {
                 role: "system",
-                content: `You are a shell command generator. Your ONLY output must be a single raw JSON object. No markdown, no code blocks, no backticks, no explanations, no extra text — just the JSON.
+                content: `You are a Linux shell expert. Convert user instructions into a single shell command and assess its risk level.
 
-The JSON must have exactly these two fields:
-- "command": the shell command as a string
-- "risk_level": one of "safe", "warning", or "danger"
+Output ONLY a JSON object with exactly these fields:
+- command: the shell command (string)
+- risk_level: "safe", "warning", or "danger" (string)
 
-Example output:
-{"command":"ls -lh","risk_level":"safe"}`,
+Do not output any other text, explanations, code blocks, or notes. Just the raw JSON.`,
             },
             {
                 role: "user",
@@ -28,25 +27,17 @@ Example output:
     });
 
     const content = response.choices[0].message.content.trim();
-
-    // Strip markdown code blocks if model misbehaves
     let jsonString = content;
-    if (jsonString.startsWith('```')) {
-        jsonString = jsonString.replace(/^```[a-z]*\s*/i, '').replace(/\s*```$/, '');
+    if (jsonString.startsWith('```json')) {
+        jsonString = jsonString.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+    } else if (jsonString.startsWith('```')) {
+        jsonString = jsonString.replace(/^```\s*/, '').replace(/\s*```$/, '');
     }
-
-    // Extract first JSON object if there's extra text
     const match = jsonString.match(/\{[\s\S]*?\}/);
-    if (match) {
-        jsonString = match[0];
-    }
-
+    if (match) jsonString = match[0];
     try {
         return JSON.parse(jsonString);
     } catch (e) {
-        return {
-            command: content,
-            risk_level: "safe",
-        };
+        return { command: content, risk_level: "safe" };
     }
 }
